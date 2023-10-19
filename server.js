@@ -1,6 +1,6 @@
 const cors = require('cors');
 const express = require('express');
-const connectDatabase = require('../database/db');
+const connectDatabase = require('./database/db');
 const app = express();
 const port = 4000; // Updated port number
 const dbRouter = require('./routes/YourModelRoutes')

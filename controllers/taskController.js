@@ -1,5 +1,5 @@
-const User = require('../../database/model/user.model');
-const Task = require('../../database/model/task.model');
+const User = require('../database/model/user.model');
+const Task = require('../database/model/task.model');
 
 const addTask = async (req, res) => {
 	const { task, id } = req.body;

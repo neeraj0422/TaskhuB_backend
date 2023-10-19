@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const YourModel = require("../../database/model/YourModel"); // Replace with the path to your model file
+const YourModel = require("../database/model/YourModel"); // Replace with the path to your model file
 
 // Create a new record
 router.post("/records", async (req, res) => {
