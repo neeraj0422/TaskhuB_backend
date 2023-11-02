@@ -5,8 +5,8 @@ const taskSchema = new mongoose.Schema(
 		task: { type: String },
 		status: {
 			type: String,
-			enum: ['backlog', 'todo', 'doing', 'done'],
-			default: 'backlog',
+			enum: ['Backlog', 'Todo', 'Doing', 'Done'],
+			default: 'Backlog',
 		},
 		createdAt: { type: Date, default: Date.now }, // Include createdAt timestamp
 		deadline: { type: Date }, // Include deadline field for tasks
