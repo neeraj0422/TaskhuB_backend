@@ -26,14 +26,14 @@ const addTask = async (req, res) => {
 const getAllTasks = async (req, res) => {
 	// const { id } = req.query;
 	try {
-		let tasklist = await Task.find({})
+			let tasklist = await Task.find({})
 		.populate('createdBy lastModifiedBy')
 		.exec();
 		console.log("tasklist",tasklist)
 		// let tasklist = await Task.find({ cretedBy: id });
 		return res.status(200).send(tasklist);
 	} catch (error) {
-		return res.status(400).send(error);
+				return res.status(400).send(error);
 	}
 };
 
@@ -41,10 +41,10 @@ const editTask = async (req, res) => {};
 
 const statusChange = async (req, res) => {
 	const { id, string ,modifiedby} = req.body;
-
+ 
 	try {
-		let task = await Task.findById({ _id: id });
-		if (string === 'right') {
+				let task = await Task.findById({ _id: id });
+				if (string === 'right') {
 			if (task.status === 'backlog') {
 				task.status = 'todo';
 				task.lastModifiedBy = modifiedby;
@@ -79,7 +79,11 @@ const statusChange = async (req, res) => {
 				return res.send(task);
 			}
 		}
-	} catch (error) {}
+		
+		
+	} catch (error) {
+		res.status(400).send('updateFailed');
+	}
 };
 
 const deleteTask = async (req, res) => {
