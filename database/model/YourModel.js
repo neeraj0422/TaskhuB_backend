@@ -59,8 +59,10 @@ const schema = new mongoose.Schema({
     type: String,
     enum: ["inprogress", "pending", "completed"],
     required: false,
-  },
-});
+  }
+},
+  { timestamps: true }
+);
 
 // Create a model
 const YourModel = mongoose.model("YourModel", schema);
