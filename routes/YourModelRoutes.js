@@ -13,13 +13,22 @@ router.post("/records", async (req, res) => {
   }
 });
 
-// Retrieve all records
 router.get("/records", async (req, res) => {
   try {
-    const records = await YourModel.find();
+    const { year, month } = req.query;
+    const yearInt = parseInt(year);
+    const monthInt = parseInt(month);
+
+    const records = await YourModel.find({
+      createdAt: {
+        $gte: new Date(yearInt, monthInt - 1, 1),  // Month is 0-indexed
+        $lt: new Date(yearInt, monthInt, 1),
+      },
+    });
+
     res.json(records);
   } catch (error) {
-    res.status(500).json({ error: error.message });
+        res.status(500).json({ error: error.message });
   }
 });
 
