@@ -10,6 +10,7 @@ const dbRouter = require('./routes/YourModelRoutes')
 // Import required modules and routes
 const authRoutes = require('./routes/authRoutes');
 const taskRouter = require('./routes/taskRoutes');
+const userRouter = require('./routes/userRoutes')
 const morgan = require('morgan');
 
 
@@ -20,6 +21,7 @@ app.use(express.json()); // Parse JSON request bodies
 app.use('/auth', authRoutes); // Mount authentication routes
 app.use('/task', taskRouter); 
 app.use('/table', dbRouter);// Mount task routes
+app.use('/users',userRouter);
 
 connectDatabase
 

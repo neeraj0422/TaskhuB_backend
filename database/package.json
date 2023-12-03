@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
-  "dependencies": {
+    "dependencies": {
     "bcryptjs": "^2.4.3",
     "email-validator": "^2.0.4",
     "jsonwebtoken": "^9.0.2",

@@ -10,6 +10,10 @@ const taskSchema = new mongoose.Schema(
 		},
 		createdAt: { type: Date, default: Date.now }, // Include createdAt timestamp
 		deadline: { type: Date }, // Include deadline field for tasks
+		assignee: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: 'User',
+		},
 		createdBy: {
 			type: mongoose.Schema.Types.ObjectId,
 			ref: 'User',
