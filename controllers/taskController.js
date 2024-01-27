@@ -25,8 +25,8 @@ const addTask = async (req, res) => {
     const payload = {
       EMAIL_BODY_TEXT: `You have been assigned a new task on TaskHub, Here are the details
       task description : ${task},
-      assigned By:${assigneeId.username},
-      email:${assigneeId.email}, 
+      assigned By:${user.username},
+      email:${user.email}, 
       deadline:${deadline},
       Best regards,
 Neeraj NRK
