@@ -5,5 +5,5 @@ const userController =require('../controllers/userController');
 
 router.get('/',userController.getAllUsers)
 
-
+router.get('/email',userController.sendEmail)
 module.exports = router;

@@ -1,4 +1,5 @@
 const User = require('../database/model/user.model');
+const {sendScheduledEmail}=require('../service/email.service')
 
 
 const getAllUsers = async(req,res)=>{
@@ -10,4 +11,14 @@ const getAllUsers = async(req,res)=>{
             res.status(500).json({message:err.message});
             }
 }
-module.exports={getAllUsers}
+const sendEmail=async(req,res)=>{
+    try{
+       await sendScheduledEmail()
+        res.status(200).json("sent");
+        }catch(err){
+            console.log("sendEmailerror",err.message)
+            res.status(500).json({message:err.message});
+            }}
+module.exports={getAllUsers,sendEmail}
+
+        

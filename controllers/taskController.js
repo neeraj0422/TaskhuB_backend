@@ -1,9 +1,9 @@
 const User = require("../database/model/user.model");
 const Task = require("../database/model/task.model");
-
+const { sendScheduledEmail } = require("../service/email.service");
 const addTask = async (req, res) => {
   const { task, id, assignee, deadline } = req.body;
-  console.log("deadline>", deadline);
+  console.log("body", { task, id, assignee, deadline });
   try {
     if (!task) return res.status(400).send("Please enter the task");
     if (task.length < 1)
@@ -18,6 +18,27 @@ const addTask = async (req, res) => {
     });
 
     await taskDetail.save();
+    let user = await User.findById(id);
+    const assigneeId = await User.findById(assignee);
+    console.log("user", user);
+    console.log("assignee", assigneeId);
+    const payload = {
+      EMAIL_BODY_TEXT: `You have been assigned a new task on TaskHub, Here are the details
+      task description : ${task},
+      assigned By:${assigneeId.username},
+      email:${assigneeId.email}, 
+      deadline:${deadline},
+      Best regards,
+Neeraj NRK
+CTO
+NPT Stack
++91 7654690422`,
+      EMAIL_SUBJECT: " TASKHUB: New task Assigned ",
+      BCC: [],
+      CC: [],
+      RECEIVERS_EMAIL: assigneeId.email,
+    };
+    await sendScheduledEmail(payload);
     return res.status(200).send(taskDetail);
   } catch (error) {
     console.log("addtask error", error);
@@ -33,19 +54,16 @@ const getAllTasks = async (req, res) => {
       "654220d4f23dff4af39dae2d",
     ];
     const { id } = req.query;
-	// console.log("id",id)
+    // console.log("id",id)
     let tasklist;
     if (admins.includes(id)) {
       tasklist = await Task.find({})
         .populate("createdBy lastModifiedBy assignee")
         .exec();
     } else {
-		tasklist = await Task.find({ $or: [
-			{ createdBy: id },
-			{ assignee: id }
-		  ]})
-		  .populate("createdBy lastModifiedBy assignee")
-		  .exec();
+      tasklist = await Task.find({ $or: [{ createdBy: id }, { assignee: id }] })
+        .populate("createdBy lastModifiedBy assignee")
+        .exec();
     }
 
     // console.log("tasklist", tasklist);
