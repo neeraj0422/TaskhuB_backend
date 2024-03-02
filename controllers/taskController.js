@@ -77,46 +77,17 @@ const getAllTasks = async (req, res) => {
 const editTask = async (req, res) => {};
 
 const statusChange = async (req, res) => {
-  const { id, string, modifiedby } = req.body;
+  const { id, value, modifiedby } = req.body;
 
   try {
+    console.log("body",req.body)
     let task = await Task.findById({ _id: id });
-    if (string === "right") {
-      if (task.status === "backlog") {
-        task.status = "todo";
-        task.lastModifiedBy = modifiedby;
-        task.save();
-        return res.send(task);
-      } else if (task.status === "todo") {
-        task.status = "doing";
-        task.lastModifiedBy = modifiedby;
-        task.save();
-        return res.send(task);
-      } else if (task.status === "doing") {
-        task.status = "done";
-        task.lastModifiedBy = modifiedby;
-        task.save();
-        return res.send(task);
-      }
-    } else {
-      if (task.status === "done") {
-        task.status = "doing";
-        task.lastModifiedBy = modifiedby;
-        task.save();
-        return res.send(task);
-      } else if (task.status === "doing") {
-        task.status = "todo";
-        task.lastModifiedBy = modifiedby;
-        task.save();
-        return res.send(task);
-      } else if (task.status === "todo") {
-        task.status = "backlog";
-        task.lastModifiedBy = modifiedby;
-        task.save();
-        return res.send(task);
-      }
-    }
-  } catch (error) {
+    task.status = value;
+    task.lastModifiedBy = modifiedby;
+    task.save();
+    res.send(task)
+  }
+    catch (error) {
     res.status(400).send("updateFailed");
   }
 };
