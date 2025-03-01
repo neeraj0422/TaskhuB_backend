@@ -2,10 +2,10 @@ const nodemailer = require("nodemailer");
 
 const SMTP_PORT = 587;
 const HOST_SERVICE = "smtp-relay.brevo.com";
-const USER_EMAIL = "id.suitsandshirts@gmail.com"; // Your SMTP user email
-const USER_PASSWORD = "r0zTtCbjXkVWvL5w"; // Your SMTP user password
+const USER_EMAIL = "id.neerajnrk@gmail.com"; // Your SMTP user email
+const USER_PASSWORD = "BywxVFrI4gf0hbca"; // Your SMTP user password
 
-const SENDERS_EMAIL = "id.suitsandshirts@gmail.com"; // Sender's email
+const SENDERS_EMAIL = "id.neerajnrk@gmail.com"; // Sender's email
 
 
 
