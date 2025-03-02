@@ -31,7 +31,7 @@ router.post("/records", async (req, res) => {
       const savedRecord = await record.save();
     }
 
-    res.status(201).json(savedRecord);
+    res.status(201).json({ status: "record created successfully" });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
