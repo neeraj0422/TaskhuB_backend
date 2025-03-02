@@ -1,7 +1,7 @@
 const User = require("../database/model/user.model");
 const Task = require("../database/model/task.model");
 const { sendScheduledEmail } = require("../service/email.service");
-const LOGO_URL = "https://ik.imagekit.io/ls9jb5u8v/logo.png?updatedAt=1740929997509";
+
 const addTask = async (req, res) => {
   const { task, id, assignee, deadline } = req.body;
   console.log("body", { task, id, assignee, deadline });
@@ -23,25 +23,32 @@ const addTask = async (req, res) => {
     const assigneeId = await User.findById(assignee);
     console.log("user", user);
     console.log("assignee", assigneeId);
-    const payload =  {
-      EMAIL_SUBJECT: "New Task Assigned to You on TaskHub",
-      RECEIVERS_EMAIL: assigneeId.email,
-      EMAIL_BODY_HTML: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px;">
-          <img src="${LOGO_URL}" alt="TaskHub Logo" style="width: 150px; display: block; margin-bottom: 20px;">
-          <h2 style="color: #333;">Hi ${assigneeId.username},</h2>
-          <p>You have been assigned a new task on <strong>TaskHub</strong> by <strong>${user.username}</strong>.</p>
-          <hr>
-          <p><strong>Task:</strong> ${task}</p>
-          <p><strong>Due Date:</strong> ${deadline}</p>
-          <hr>
-        <p>To view and manage your task, please log in to your TaskHub account:</p>
+    const payload = {
+  EMAIL_BODY_TEXT: `
+    Hi ${assigneeId.username},
+
+    You have a new task assigned to you on TaskHub!
+
+    **Task Details:**
+
+    * **Task Name:** ${task}
+    * **Assigned by:** ${user.username}
+    * **Due Date:** ${deadline}
+
+   <p>To view and manage your task, please log in to your TaskHub account:</p>
           <p><a href="https://task-hub-green.vercel.app/signin" style="color: #007bff; text-decoration: none; font-weight: bold;">Click here to log in</a></p>
           <p>Best regards,</p>
           <p><strong>The TaskHub Team</strong></p>
-          
-        </div>`
-    };    await sendScheduledEmail(payload);
+    Best regards,
+
+    The TaskHub Team
+  `,
+  EMAIL_SUBJECT: "New Task Assigned to You on TaskHub",
+  BCC:null,
+  CC:null,
+  RECEIVERS_EMAIL: assigneeId.email,
+};
+    await sendScheduledEmail(payload);
     return res.status(200).send(taskDetail);
   } catch (error) {
     console.log("addtask error", error);
