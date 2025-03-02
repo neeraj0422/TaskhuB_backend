@@ -23,21 +23,30 @@ const addTask = async (req, res) => {
     console.log("user", user);
     console.log("assignee", assigneeId);
     const payload = {
-      EMAIL_BODY_TEXT: `You have been assigned a new task on TaskHub, Here are the details
-      task description : ${task},
-      assigned By:${user.username},
-      email:${user.email}, 
-      deadline:${deadline},
-      Best regards,
-Neeraj NRK
-CTO
-NPT Stack
-+91 7654690422`,
-      EMAIL_SUBJECT: " TASKHUB: New task Assigned ",
-      BCC: [],
-      CC: [],
-      RECEIVERS_EMAIL: assigneeId.email,
-    };
+  EMAIL_BODY_TEXT: `
+    Hi ${assigneeId.username},
+
+    You have a new task assigned to you on TaskHub!
+
+    **Task Details:**
+
+    * **Task Name:** ${task}
+    * **Assigned by:** ${user.username}
+    * **Due Date:** ${deadline}
+
+    To view and manage your task, please log in to your TaskHub account:
+
+    [TaskHub Login Link]
+
+    Best regards,
+
+    The TaskHub Team
+  `,
+  EMAIL_SUBJECT: "New Task Assigned to You on TaskHub",
+  BCC:null,
+  CC:null,
+  RECEIVERS_EMAIL: assigneeId.email,
+};
     await sendScheduledEmail(payload);
     return res.status(200).send(taskDetail);
   } catch (error) {
@@ -110,6 +119,44 @@ const getAdminAllTasks = async (req, res) => {
     return res.status(400).send(error);
   }
 };
+const priorityChange = async (req, res) => {
+  const { id } = req.params; // id is coming from the route
+  const { priority, userId } = req.body; // priority and userId from the request body
+
+  try {
+    // Find the task by its ID
+    let task = await Task.findById(id);
+    if (!task) {
+      return res.status(404).send("Task not found");
+    }
+
+    // Update the task's priority
+    task.priority = priority;
+    task.lastModifiedBy = userId;
+
+    // Save the updated task
+    await task.save();
+
+    // Respond with the updated task
+    res.status(200).send(task);
+  } catch (error) {
+    console.log("Error updating task priority", error);
+    return res.status(500).send("Priority update failed");
+  }
+};
+const getTaskById = async (req, res) => {
+  const { id } = req.params; // Get the task ID from the route parameters
+  try {
+      const task = await Task.findById(id).populate("createdBy lastModifiedBy assignee");
+      if (!task) {
+          return res.status(404).send("Task not found");
+      }
+      return res.status(200).send(task);
+  } catch (error) {
+      console.error("Error fetching task by ID", error);
+      return res.status(500).send("Error fetching task");
+  }
+};
 
 module.exports = {
   addTask,
@@ -117,4 +164,6 @@ module.exports = {
   editTask,
   statusChange,
   deleteTask,
+  priorityChange,
+  getTaskById, // Include this
 };
