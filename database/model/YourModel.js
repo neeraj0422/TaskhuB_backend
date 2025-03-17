@@ -59,6 +59,14 @@ const schema = new mongoose.Schema({
     type: String,
     enum: ["inprogress", "pending", "completed"],
     required: false,
+  },
+  Month: {
+    type: Number,
+    required: true
+  },
+  Year: {
+    type: Number,
+    required: true
   }
 },
   { timestamps: true }

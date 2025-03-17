@@ -6,6 +6,8 @@ const YourModel = require("../database/model/YourModel"); // Replace with the pa
 router.post("/records", async (req, res) => {
   try {
     const uniqueEntries = req.body.list;
+    const Month = req.body.month;
+    const Year = req.body.year;
 
     const defaultFields = {
       Basecone: "pending",
@@ -24,6 +26,8 @@ router.post("/records", async (req, res) => {
     const finalRecords = uniqueEntries.map((entry) => ({
       ...entry,
       ...defaultFields,
+      Month,
+      Year
     }));
 
     for (const rec of finalRecords) {
@@ -44,10 +48,8 @@ router.get("/records", async (req, res) => {
     const monthInt = parseInt(month);
 
     const records = await YourModel.find({
-      createdAt: {
-        $gte: new Date(yearInt, monthInt - 1, 1), // Month is 0-indexed
-        $lt: new Date(yearInt, monthInt, 1),
-      },
+      Month: monthInt,
+      Year: yearInt
     });
 
     res.json(records);
